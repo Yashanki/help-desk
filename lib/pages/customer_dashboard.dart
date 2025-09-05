@@ -26,7 +26,7 @@ class _CustomerDashboardState extends State<CustomerDashboard> {
                 : (email.isNotEmpty ? email[0] : 'C'))
             .toUpperCase();
 
-    final pages = <Widget>[const CustomerHome(), const CustomerProfilePage()];
+    final pages = <Widget>[const CustomerHome(), const CustomerProfileScreen()];
 
     return Scaffold(
       body: SafeArea(
