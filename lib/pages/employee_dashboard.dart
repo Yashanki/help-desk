@@ -27,7 +27,7 @@ class _EmployeeDashboardState extends State<EmployeeDashboard> {
 
     final pages = <Widget>[
       const EmployeeHome(), // Dashboard
-      const EmployeeProfileTemp(), // Profile
+      const EmployeeProfilePage(), // Profile
     ];
 
     return Scaffold(
