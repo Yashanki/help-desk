@@ -1,0 +1,63 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{db}/documents {
+
+    // Helpers
+    function me() { return request.auth != null ? request.auth.uid : null; }
+    function userDoc(uid) { return /databases/$(db)/documents/users/$(uid); }
+    function roleIs(r) {
+      return me()!=null && exists(userDoc(me())) &&
+             get(userDoc(me())).data.role == r;
+    }
+    function isCustomer() { return roleIs("customer"); }
+    function isEmployee() { return roleIs("employee"); }
+
+    // Users
+    match /users/{uid} {
+      allow read:    if isEmployee() || me()==uid;
+      allow create:  if isEmployee();           // seed/admin only
+      allow update:  if me()==uid;              // user edits own profile
+      allow delete:  if false;
+    }
+
+    // Tickets
+    match /tickets/{tid} {
+      allow create: if isCustomer() &&
+                    request.resource.data.customerId == me();
+
+      allow read: if isEmployee() ||
+                  (isCustomer() && resource.data.customerId == me());
+
+      allow update: if
+        isEmployee() ||
+        (isCustomer() &&
+         resource.data.customerId == me() &&
+         request.resource.data.diff(resource.data).changedKeys()
+           .hasOnly(["title","description","priority","status"]));
+
+      allow delete: if isEmployee(); // optional
+    }
+
+    // Comments
+    match /tickets/{tid}/comments/{cid} {
+      // employees see all; customers see only public on their ticket
+      allow read: if isEmployee() ||
+        (isCustomer() &&
+         exists(/databases/$(db)/documents/tickets/$(tid)) &&
+         get(/databases/$(db)/documents/tickets/$(tid)).data.customerId == me() &&
+         resource.data.visibility == "public");
+
+      // employees can create public/internal; customers only public on their ticket
+      allow create: if me()!=null && (
+        isEmployee() ||
+        (isCustomer() &&
+         exists(/databases/$(db)/documents/tickets/$(tid)) &&
+         get(/databases/$(db)/documents/tickets/$(tid)).data.customerId == me() &&
+         request.resource.data.visibility == "public")
+      );
+
+      // keep simple: only employees may edit/delete comments
+      allow update, delete: if isEmployee();
+    }
+  }
+}

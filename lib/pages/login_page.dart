@@ -94,14 +94,14 @@ class _LoginPageState extends State<LoginPage> {
                         _email.text = 'customer@example.com';
                         _password.text = 'TempPass123!';
                       },
-                      child: const Text('Fill Customer'),
+                      child: const Text('Fill Customer login'),
                     ),
                     OutlinedButton(
                       onPressed: () {
                         _email.text = 'employee@example.com';
                         _password.text = 'TempPass123!';
                       },
-                      child: const Text('Fill Employee'),
+                      child: const Text('Fill Employee login'),
                     ),
                   ],
                 ),
