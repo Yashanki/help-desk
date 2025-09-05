@@ -8,4 +8,9 @@ class UserRepo {
       .doc(uid)
       .snapshots()
       .map((s) => s.exists ? AppUser.fromMap(s.id, s.data()!) : null);
+
+  Stream<List<AppUser>> watchAllCustomers() => _col
+      .where('role', isEqualTo: 'customer')
+      .snapshots()
+      .map((q) => q.docs.map((d) => AppUser.fromMap(d.id, d.data())).toList());
 }

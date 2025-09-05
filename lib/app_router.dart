@@ -6,8 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'features/auth/auth_controller.dart';
 import 'features/auth/sign_in_page.dart';
-import 'features/customer/customer_dashboard_page.dart';
-import 'features/employee/employee_dashboard_page.dart';
+import 'core/persistent_shell.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   // Listen to our AppUser stream (auth + role)
@@ -23,11 +22,23 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/login', builder: (_, __) => const SignInPage()),
       GoRoute(
         path: '/customer/dashboard',
-        builder: (_, __) => const CustomerDashboardPage(),
+        builder: (_, __) =>
+            const PersistentShell(selectedIndex: 0, role: 'customer'),
       ),
       GoRoute(
         path: '/employee/dashboard',
-        builder: (_, __) => const EmployeeDashboardPage(),
+        builder: (_, __) =>
+            const PersistentShell(selectedIndex: 0, role: 'employee'),
+      ),
+      GoRoute(
+        path: '/employee/customers',
+        builder: (_, __) =>
+            const PersistentShell(selectedIndex: 1, role: 'employee'),
+      ),
+      GoRoute(
+        path: '/employee/profile',
+        builder: (_, __) =>
+            const PersistentShell(selectedIndex: 2, role: 'employee'),
       ),
     ],
     redirect: (context, state) {

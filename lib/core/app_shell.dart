@@ -16,9 +16,8 @@ class AppShell extends StatelessWidget {
   void _nav(BuildContext context, int i) {
     if (role == 'employee') {
       if (i == 0) context.go('/employee/dashboard');
-      if (i == 1) context.go('/employee/dashboard'); // later: /employee/tickets
-      if (i == 2) {} // /employee/customers
-      if (i == 3) {} // /employee/profile
+      if (i == 1) context.go('/employee/customers');
+      if (i == 2) context.go('/employee/profile');
     } else {
       if (i == 0) context.go('/customer/dashboard');
       if (i == 1) context.go('/customer/dashboard'); // later: /customer/tickets
@@ -45,11 +44,6 @@ class AppShell extends StatelessWidget {
                 icon: Icon(Icons.dashboard_outlined),
                 selectedIcon: Icon(Icons.dashboard),
                 label: Text('Dashboard'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.confirmation_number_outlined),
-                selectedIcon: Icon(Icons.confirmation_number),
-                label: Text('Tickets'),
               ),
               NavigationRailDestination(
                 icon: Icon(Icons.people_alt_outlined),
