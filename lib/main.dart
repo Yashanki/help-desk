@@ -20,6 +20,7 @@ class HelpDeskApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'HelpDesk',
       theme: ThemeData(colorSchemeSeed: Colors.indigo, useMaterial3: true),
       home: const AuthGate(),
